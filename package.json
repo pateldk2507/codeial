@@ -1,0 +1,16 @@
+{
+  "name": "codeial",
+  "version": "1.0.0",
+  "description": "First Social Media website using node mongo and express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Dhaval Patel",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.11.1"
+  }
+}
