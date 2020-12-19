@@ -1,0 +1,98 @@
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/_home.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+<h1>
+    <%= pageTitle%>
+</h1>
+
+<div class="container" id="home-container">
+<section id="feed-posts">
+        <h4>Posts</h4>
+
+        <% if(locals.user){ var id = locals.user._id; %>
+
+   
+            <form action="/posts/create" id="new-post-form" method="POST" style="max-width: 500px;" >
+            <textarea name="content" class="form-control"  cols="30" rows="3" required placeholder="type here..."></textarea>
+            <br>
+            <input type="submit" class="btn btn-primary" value="Create Post">
+            <br>
+            </form>
+    
+        
+        <br>
+        <ul class="w3-ul w3-card-4">
+            <% for (post of posts){%>
+            <li class="w3-bar">
+                <%if(locals.user.id == post.user.id) {%>
+              <a onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right" href="/posts/destroy/<%= post.id%>"><i class="fa fa-trash" aria-hidden="true"></i></a>
+              <%}%>
+              <!-- <img src="/images/img_avatar2.png" class="w3-bar-item w3-circle " style="width:85px"> -->
+              <div class="w3-bar-item">
+                <span class="w3-large"><%= post.content%></span><br>
+                <span>by <%= post.user.name%></span>
+              </div>
+            </li>
+
+            <div class="post-comment">
+
+                <% if(locals.user){%>
+
+                  <form action="/comments/create" method="POST">
+                  
+                  <input type="text" name="content" placeholder="Comment here..." required>
+                  <input type="hidden" name="post" value= <%= post.id%> >
+                  <input type="submit" value="Add Comment" class="btn btn-primary">
+                  
+                  </form>
+                <%}%>
+
+                  <div class="post-comments-list">
+                    <ul id="post-comments-<%= post._id%>">
+                     
+                        <% for(comment of post.comments){%>
+                            <li>
+
+                              <% if((locals.user) && (locals.user.id == comment.user.id) ){%>
+                                <small>
+                                  <a href="/comments/destroy/<%=comment._id%>">X</a>
+                                </small>
+                              <%}%>
+
+                              <p>
+                                <%= comment.content%>
+                              </p>
+                              <small>
+                                 <%= comment.user.name%>
+                              </small>
+                            </li>
+
+                         <%}%> 
+                        
+                    </ul>
+
+
+                  </div>
+
+            </div>
+
+            <%}%>
+        </ul>
+        <%}%>
+    
+</section>
+
+<section id="user-friend">
+
+  <h4>Friends</h4>
+
+    <% for (u of all_users){%>
+
+    <p>
+      <a href="/user/profile/<%=u._id%>"><%=u.name%></a>
+    </p>
+    <%}%>
+</section>
+</div>

@@ -1,0 +1,12 @@
+.card {
+  border: 1px solid black;
+  padding: 7px;
+  border-radius: 10px;
+  background-color: ghostwhite; }
+
+body {
+  background-color: #f0f0f0; }
+
+.mainHeading {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: forestgreen; }

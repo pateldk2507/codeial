@@ -1,0 +1,152 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/css/_home.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<div class="container-fluid">
+        
+        <!-- Heading Row -->
+        <div class="row">
+            <div class="col">
+                <h3 style="text-align: center;">codeial home  </h3>
+            </div>
+        </div>
+
+        <!-- End of Heading Row -->
+
+
+
+<br>
+
+        <!-- Second Row -->
+            <div class="row" style="text-align: center; ">
+               
+
+                <!-- This is First Row-->
+                
+                <div class="col" style="height: 100%;">
+                    Notification Section
+                </div>
+
+                <!-- End of First Row-->
+
+
+                <!-- This is second Row-->
+
+             <div class="col-6" style="height: 100%; border-right:1px solid black;border-left:1px solid black;">
+            
+                <% if(locals.user){ var id = locals.user._id; %>
+
+                    
+                    <div class="card">
+                        <div class="card-title">
+                            Create Post
+                        </div>
+                        <div class="card-body">
+                            
+                                <form action="/posts/create" method="POST"  id="new-post-form">
+                                    <div class="row">
+                                    <div class="col-10">
+                                    <input type="text" name="content" id="content" class="form-control" placeholder="Enter something..." required>
+                                </div>
+                                <div class="col">
+                                    <input type="submit"  id="createPost" class="btn btn-info" value="Upload">
+                                </div>
+                                </div>
+                                </form>
+                        </div>
+                        
+                    </div>
+                    <br><br>
+                    <h1>Post Feed</h1>
+                    <br>
+                    <br>
+
+
+                    <% for (post of posts){%>
+                  <div id="post">
+                    <div class="card" style="margin: 10px; padding: 10px;">
+                    <div class="cardbody">
+                        <%if(locals.user.id == post.user.id) {%>
+                            <a onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right" href="/posts/destroy/<%= post.id%>"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <%}%>
+                        <p class="card-text" style="font-size: 20px;"> <b> <%= post.content%> </b> </p>
+                        <small style="float: right; margin: 5px;">
+                            by <%= post.user.name%>
+                        </small>
+                    </div>
+
+
+                    <div class="card">
+                        <div class="cardbody">
+
+                        
+                            <div class="comment-section" style="overflow-y: scroll; max-height:200px; overflow-x: hidden;">
+                            <% for(comment of post.comments){%>
+                            <div class="row">
+                                <div class="col-10" >
+                                    <div class="card" style="padding:5px; margin: 5px;">
+                                        <h5 class="card-title" style="text-align: left; margin-left: 5px;">
+                                             <a href="/user/profile/<%=comment.user.id%>" style=" text-decoration: none;">   <%= comment.user.name%> </a> 
+                                        </h5>
+                                        <h6 class="card-title" style="text-align: left; margin-left: 5px;">
+                                            <%= comment.content%>
+                                        </h6> 
+                                    </div>
+                                </div>
+                                
+                                <% if((locals.user) && (locals.user.id == comment.user.id) ){%>
+                                <div class="col" style="display: flex;">
+                                    <a href="/comments/destroy/<%=comment._id%>" style=" text-decoration: none;" class="d-flex align-items-center"><i class="fa fa-trash" style="font-size: 30px; margin-right: 5px; text-align: center;" aria-hidden="true"></i></a>
+                                </div>
+                                <%}%>
+                                
+                            </div>
+
+                            <%}%>
+                        </div>
+                    </div>
+                        <% if(locals.user){%>
+                            <form action="/comments/create" method="POST">
+                                <div class="row" style="margin-top: 5px;">
+                                    <div class="col-9" style=" margin-left: 18px; padding: 7px;">
+                                        <input type="text" name="content"  class="form-control" placeholder="Enter your comment...">
+                                    </div>
+                                     <div class="col" style=" padding: 7px;">
+                                        <input type="hidden" name="post" id="PostId" value= <%= post.id%> >
+                                        <input type="submit" id="addComment" value="comment" class="btn btn-primary">
+                                     </div>   
+                                </div>
+                            </form>
+                            <%}%>
+
+
+
+
+                        </div>
+                    </div>
+                    </div>
+                <hr>
+                    <%}%>
+                    
+                <%}%>
+
+              </div>
+
+
+<!-- ----------------------This is friend list section Third Row------------------------ -->
+              
+                <div class="col" style="height: 100%;">
+                    <h3>Friend List</h3>
+                    <% for (u of all_users){%>
+
+                        <p>
+                          <a href="/user/profile/<%=u._id%>"><%=u.name%></a>
+                        </p>
+                        <%}%>
+                </div>
+
+<!-- ------------------------------------------------------------------------- -->        
+            </div> <!-- Main Row -->
+     </div>  <!--  container-fluid -->
+
+     <script src="/js/home_post.js"></script>

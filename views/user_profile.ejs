@@ -1,0 +1,35 @@
+ <link rel="stylesheet" href="/css/user_profile.css">
+ <link href='https://fonts.googleapis.com/css?family=Bungee Shade' rel='stylesheet'>
+ <div class="container" style="max-width: 350px;">
+  <h1>User Profile</h1>
+
+
+  <% if(locals.user._id != user_id){%>
+ <div class="card">
+   <div class="card-body">
+      <h5 class="card-title" style="font-family: 'Bungee Shade'; color: blueviolet;"> <strong> User information</strong> </h5>
+      <hr>
+     <p class="card-text"> <b style="float: left;"> Name :</b>  <%= user_profile.name%> </p>
+     <p class="card-text"><b style="float: left;">&nbsp; Email :</b> <%= user_profile.email%></p>
+     <!-- <form action="">
+      <input type="submit" class="btn btn-danger" id="btnLogout" value="Logout" name="Logout" formaction="/user/logout"> 
+   </form> -->
+   </div>
+ </div>
+ <%}else{%>
+
+  <form action="" method="POST" class="form">
+    <input type="text" name="name" class="form-control" value= " <%=user_profile.name%> " >
+    <input type="email" name="email" class="form-control" value= <%=user_profile.email%> ><br>
+    <input type="submit" class="btn btn-warning" name="Edit" value="Edit" formaction="/user/edit/<%=user_profile.id%>">
+  </form>
+
+  <%}%>
+
+
+<a href="/">View Posts</a>
+
+</div>
+ 
+
+ 

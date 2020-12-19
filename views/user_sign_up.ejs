@@ -1,0 +1,16 @@
+<link rel="stylesheet" href="/css/user_register.css">
+<div class="container" style="max-width: 500px;">
+    <div class="card">
+        <h1 class="mainHeading">Create Account</h1>
+            <form action="/user/create" method="POST" class="form"> 
+                    <input type="text" name="name"  class="form-control" placeholder="Your Name " required><br>
+                    <input type="email" name="email" class="form-control" placeholder="Your Email " required><br>
+                    <input type="password" name="password" class="form-control" placeholder="password" required><br>
+                    <input type="password" name="conformPassword" class="form-control" placeholder="Conform Password" required><br>
+                    <input type="submit" class="btn btn-primary" value="Register">
+                    <br>
+                    <br>
+                    <a href="/user/user-signin">Already have account? </a>    
+            </form>
+    </div>
+</div>
