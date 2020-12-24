@@ -28,8 +28,10 @@
 
        <script>
           <% if(flash.success && flash.success.length > 0){ %>
+              alertify.set('notifier','position', 'top-right');
               alertify.success("<%= flash.success %>");
           <%} else if(flash.error && flash.error.length > 0) {%>
+            alertify.set('notifier','position', 'top-right');
               alertify.error("<%= flash.error %>");
           <%}%>
        </script>

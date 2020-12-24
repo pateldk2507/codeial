@@ -1,4 +1,6 @@
 const User = require("../models/users");
+const fs = require('fs');
+const path = require('path');
 
 module.exports.profile = function(req,res){
 
@@ -128,17 +130,50 @@ module.exports.createSession = function(req,res){
 }
 
 
-module.exports.edit = function(req,res){
+module.exports.edit = async function(req,res){
 
-    User.findByIdAndUpdate(req.params.id, {
-        name : req.body.name,
-        email : req.body.email
-    }, function(err,user){
-        if(err){console.log("Error while updating user info",err);}
+    //   User.findByIdAndUpdate(req.params.id, {
+    //     name : req.body.name,
+    //     email : req.body.email
+    // }, function(err,user){
+    //     if(err){console.log("Error while updating user info",err);}
 
-        return res.redirect('back');
+    //     return res.redirect('back');
 
-    })
+    // })
+
+    try {
+
+        let user = await User.findById(req.params.id);
+
+        User.uploadAvatar(req,res,function(err){
+            if(err){console.log("multue error!",err);}
+
+            user.name = req.body.name;
+            user.email = req.body.email;
+
+            if(req.file){
+                
+                if(user.avatar){
+                    console.log(__dirname);
+                    fs.unlinkSync(path.join(__dirname,'../uploads',user.avatar));
+                }
+
+                //this is stroing the path of the uploaded file in DB.
+                user.avatar = User.avatarPath + '/' + req.file.filename;
+            }
+
+            user.save();
+            return res.redirect('back');
+
+        })
+
+
+    } catch (error) {
+            console.log("Error in updating data..!!..",error);        
+    }
+
+
 
 
 }

@@ -10,4 +10,10 @@ router.use('/user',require('./users'));
 router.use('/posts', require('./post'));
 router.use('/comments',require('./comment'));
 
+//APIS
+router.use('/api',require('./api'));
+
+router.use('/likes',require('./likes'));
+
+
 module.exports = router;

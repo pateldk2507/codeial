@@ -23,7 +23,7 @@
 
                 <!-- This is First Row-->
                 
-                <div class="col" style="height: 100%;">
+                <div class="col-xl-3 col-md-12" style="height: 100%;">
                     Notification Section
                 </div>
 
@@ -32,7 +32,7 @@
 
                 <!-- This is second Row-->
 
-             <div class="col-6" style="height: 100%; border-right:1px solid black;border-left:1px solid black;">
+             <div class="col-xl-6 col-md-12" style="height: 100%; border-right:1px solid black;border-left:1px solid black;">
             
                 <% if(locals.user){ var id = locals.user._id; %>
 
@@ -45,10 +45,10 @@
                             
                                 <form action="/posts/create" method="POST"  id="new-post-form">
                                     <div class="row">
-                                    <div class="col-10">
+                                    <div class="col-xl-8 col-md-12">
                                     <input type="text" name="content" id="content" class="form-control" placeholder="Enter something..." required>
-                                </div>
-                                <div class="col">
+                                </div><br> <br>
+                                <div class="col-xl-4 col-md-12">
                                     <input type="submit"  id="createPost" class="btn btn-info" value="Upload">
                                 </div>
                                 </div>
@@ -63,24 +63,37 @@
 
 
                     <% for (post of posts){%>
-                  <div id="post">
+                  <div id="post-<%= post.id%>" class="post">
                     <div class="card" style="margin: 10px; padding: 10px;">
                     <div class="cardbody">
                         <%if(locals.user.id == post.user.id) {%>
-                            <a onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right" href="/posts/destroy/<%= post.id%>"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                            <!-- <a onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right delete-post-button" href="/posts/destroy/<%= post.id%>"><i class="fa fa-trash" aria-hidden="true"></i></a> -->
+                            <button onclick="destroyPost(this);" post-id="<%= post.id%>">Delete</button>
                             <%}%>
                         <p class="card-text" style="font-size: 20px;"> <b> <%= post.content%> </b> </p>
                         <small style="float: right; margin: 5px;">
                             by <%= post.user.name%>
                         </small>
+                        <small>
+
+                            <% if(locals.user){ %>
+                                <a href="/likes/toggle/?id=<%= post._id%>&type=Post" class="toggle-like-button" data-likes="<%= post.likes.length %>">
+                                  <%= post.likes.length%> Likes
+                                </a>
+                            <%} else{%>
+            
+                              <%= post.likes.length%> Likes
+            
+                             <%}%> 
+            
+                          </small>
                     </div>
 
 
-                    <div class="card">
+                    <!-- comment section -->
+                    <div class="card " >
                         <div class="cardbody">
-
-                        
-                            <div class="comment-section" style="overflow-y: scroll; max-height:200px; overflow-x: hidden;">
+                            <div class="comment-section" id="<%= post.id%>" style="overflow-y: scroll; max-height:200px; overflow-x: hidden;">
                             <% for(comment of post.comments){%>
                             <div class="row">
                                 <div class="col-10" >
@@ -106,24 +119,21 @@
                         </div>
                     </div>
                         <% if(locals.user){%>
-                            <form action="/comments/create" method="POST">
+                            <form action="/comments/create" method="POST" id="create-new-comment">
                                 <div class="row" style="margin-top: 5px;">
                                     <div class="col-9" style=" margin-left: 18px; padding: 7px;">
-                                        <input type="text" name="content"  class="form-control" placeholder="Enter your comment...">
+                                        <input type="text" name="content" id="comment-content"  class="form-control" placeholder="Enter your comment...">
                                     </div>
                                      <div class="col" style=" padding: 7px;">
                                         <input type="hidden" name="post" id="PostId" value= <%= post.id%> >
-                                        <input type="submit" id="addComment" value="comment" class="btn btn-primary">
+                                        <input type="submit" id="createComment" value="comment" class="btn btn-primary">
                                      </div>   
                                 </div>
                             </form>
                             <%}%>
-
-
-
-
                         </div>
                     </div>
+
                     </div>
                 <hr>
                     <%}%>
@@ -135,14 +145,29 @@
 
 <!-- ----------------------This is friend list section Third Row------------------------ -->
               
-                <div class="col" style="height: 100%;">
+                <div class="col-xl-3 col-md-12" style="height: 100%;">
                     <h3>Friend List</h3>
+                    <div class="w3-container" style="margin-left: 5px;">
+                        <ul class="w3-ul w3-card-4">
                     <% for (u of all_users){%>
 
-                        <p>
-                          <a href="/user/profile/<%=u._id%>"><%=u.name%></a>
-                        </p>
+                        <!-- <div class="row list-group-item list-group-item-action">
+                            <div class="col"> <img src="<%= u.avatar%>" alt="<%= u.name%>" width="50" height="50" style="border-radius: 50%;">
+                            <span><a href="/user/profile/<%=u._id%>" ><%=u.name%></a></span></div>
+                        </div> -->
+                          
+                      
+                            <li class="w3-bar">
+                              <img src="<%= u.avatar%>" alt="<%= u.name%>" class="w3-bar-item w3-circle " style="height: 80px; width: 80px;">
+                              <div class="w3-bar-item">
+                                <span class="w3-large"><a href="/user/profile/<%=u._id%>" ><%=u.name%></a></span>
+                              </div>
+                            </li>
+                        
+                        
                         <%}%>
+                    </ul>    
+                    </div>  
                 </div>
 
 <!-- ------------------------------------------------------------------------- -->        
@@ -150,3 +175,12 @@
      </div>  <!--  container-fluid -->
 
      <script src="/js/home_post.js"></script>
+     <script src="/js/togglelikes.js"></script>
+
+     <script>
+         $('.toggle-like-button').each(function(){
+        
+             let self = this;
+             let toggleLike = new ToggleLike(self);
+         })
+     </script>

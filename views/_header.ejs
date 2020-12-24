@@ -1,16 +1,34 @@
+<style>
+    .myHeader li{
+        list-style-type: none;
+        display: inline;
+    }
+    .myHeader li a{
+        text-decoration: none;
+    }
+    .myHeader{
+        background-color: aquamarine;
+        
+    }
+    body{
+        margin: 0px;
+    }
+</style>
 <header>
 
-    <div>
+    <div class="myHeader">
         <ul>
                 <% if(locals.user) { %>
                     
-                    <li>
-                        <a href="/user/profile"> <%= locals.user.name%>   </a>
-                    </li>
+                   
+                            <li style="font-size: large;">
+                                <a href="/user/profile/<%=locals.user.id%>"> <%= locals.user.name%>   </a>
+                            </li>
+
+                            <li style="float: right; margin-right: 5px;">
+                                <a href="/user/logout"> Logout </a>
+                            </li>
                     
-                    <li>
-                        <a href="/user/logout"> Logout </a>
-                    </li>
 
                 <% } else{ %>
 

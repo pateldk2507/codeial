@@ -9,6 +9,8 @@ const db = require('./config/mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocal = require('./config/passport-local-strategy');
+const passportJWT = require('./config/passport-jwt-strategy');
+const passportGoogle = require('./config/passport-google-oauth2-stratrgy');
 const MongoStore = require('connect-mongo')(session);
 
 //
@@ -30,6 +32,7 @@ app.use(sassMiddleaware({
 app.use(express.urlencoded());
 app.use(cookieParser());
 app.use(express.static('./assets'));
+app.use(express.static(__dirname + '/uploads'));
 app.use(expressLayout);
 
 app.set('layout extractStyles', true);
@@ -56,14 +59,6 @@ app.use(session({
 
 }));
 
-// app.get('/user/logout', function(req, res){
-//     // Destroy the session if any
-//     req.logout();
-//     // Clear the specified cookies
-//     res.clearCookie('Codial');
-//     // Redirect to homepage
-//     res.redirect('/');
-// });
 
 app.use(passport.initialize());
 app.use(passport.session());
