@@ -12,9 +12,6 @@ class ToggleLike{
             e.preventDefault();
             
             let self = this;
-
-            console.log("Self"+ self);
-
             $.ajax({
                 type : 'POST',
                 url : $(self).attr('href'),
@@ -22,8 +19,6 @@ class ToggleLike{
             .done(function(response){
 
                  var res =  JSON.parse(JSON.stringify(response));
-                
-                
                    let likesCount = parseInt($(self).attr('data-likes'));
                    if(res.deleted == true){
                        likesCount -= 1;

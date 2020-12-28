@@ -1,4 +1,5 @@
 const Post = require('../models/post');
+const User = require('../models/users');
 const Comment = require('../models/comment');
 
 // module.exports.create = function(req,res){
@@ -39,10 +40,16 @@ module.exports.create = async function(req,res){
             user : req.user._id
         });
 
+        let post_user = await User.findById(req.user._id);
+
+     
+        console.log("Post Data when Created " + post);
         if (req.xhr) {
             return res.status(200).json({
                 data : {
-                    post : post
+                    post : post,
+                    post_user : post_user,
+                    
                 },
                 message : "Post Created"
             })

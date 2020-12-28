@@ -24,8 +24,31 @@
                 <!-- This is First Row-->
                 
                 <div class="col-xl-3 col-md-12" style="height: 100%;">
-                    Notification Section
+                    <h3>Friend List</h3>
+                    <div class="w3-container" style="margin-left: 5px;">
+                        <ul class="w3-ul w3-card-4">
+                    <% for (u of all_users){%>
+
+                        <!-- <div class="row list-group-item list-group-item-action">
+                            <div class="col"> <img src="<%= u.avatar%>" alt="<%= u.name%>" width="50" height="50" style="border-radius: 50%;">
+                            <span><a href="/user/profile/<%=u._id%>" ><%=u.name%></a></span></div>
+                        </div> -->
+                          
+                      
+                            <li class="w3-bar">
+                              <img src="<%= u.avatar%>" alt="<%= u.name%>" class="w3-bar-item w3-circle " style="height: 80px; width: 80px;">
+                              <div class="w3-bar-item">
+                                <span class="w3-large"><a href="/user/profile/<%=u._id%>" ><%=u.name%></a></span>
+                              </div>
+                            </li>
+                        
+                        
+                        <%}%>
+                    </ul>    
+                    </div>  
                 </div>
+
+               
 
                 <!-- End of First Row-->
 
@@ -63,7 +86,7 @@
 
 
                     <% for (post of posts){%>
-                  <div id="post-<%= post.id%>" class="post">
+                  <div id="<%= post.id%>" class="post">
                     <div class="card" style="margin: 10px; padding: 10px;">
                     <div class="cardbody">
                         <%if(locals.user.id == post.user.id) {%>
@@ -93,7 +116,7 @@
                     <!-- comment section -->
                     <div class="card " >
                         <div class="cardbody">
-                            <div class="comment-section" id="<%= post.id%>" style="overflow-y: scroll; max-height:200px; overflow-x: hidden;">
+                            <div class="comment-section" id="comment-<%= post.id%>" style="overflow-y: scroll; max-height:200px; overflow-x: hidden;">
                             <% for(comment of post.comments){%>
                             <div class="row">
                                 <div class="col-10" >
@@ -107,10 +130,18 @@
                                     </div>
                                 </div>
                                 
-                                <% if((locals.user) && (locals.user.id == comment.user.id) ){%>
+                                <%if(locals.user){%>
                                 <div class="col" style="display: flex;">
+                                    <a href="/likes/toggle/?id=<%= comment._id%>&type=Comment" class="toggle-like-button" data-likes="<%= comment.likes.length %>">
+                                        <%= comment.likes.length%> Likes
+                                    </a>
+                                     <%  if(locals.user.id == comment.user.id){%>
+                               
                                     <a href="/comments/destroy/<%=comment._id%>" style=" text-decoration: none;" class="d-flex align-items-center"><i class="fa fa-trash" style="font-size: 30px; margin-right: 5px; text-align: center;" aria-hidden="true"></i></a>
-                                </div>
+
+                               
+                                <%}%>
+                            </div>
                                 <%}%>
                                 
                             </div>
@@ -119,7 +150,7 @@
                         </div>
                     </div>
                         <% if(locals.user){%>
-                            <form action="/comments/create" method="POST" id="create-new-comment">
+                            <form action="/comments/create" method="POST" id="new-comment-<%= post.id%>">
                                 <div class="row" style="margin-top: 5px;">
                                     <div class="col-9" style=" margin-left: 18px; padding: 7px;">
                                         <input type="text" name="content" id="comment-content"  class="form-control" placeholder="Enter your comment...">
@@ -144,39 +175,26 @@
 
 
 <!-- ----------------------This is friend list section Third Row------------------------ -->
+<div class="col-xl-3 col-md-12" style="height: 100%;">
+    <%- include('_chat_box')%>
+</div>
               
-                <div class="col-xl-3 col-md-12" style="height: 100%;">
-                    <h3>Friend List</h3>
-                    <div class="w3-container" style="margin-left: 5px;">
-                        <ul class="w3-ul w3-card-4">
-                    <% for (u of all_users){%>
-
-                        <!-- <div class="row list-group-item list-group-item-action">
-                            <div class="col"> <img src="<%= u.avatar%>" alt="<%= u.name%>" width="50" height="50" style="border-radius: 50%;">
-                            <span><a href="/user/profile/<%=u._id%>" ><%=u.name%></a></span></div>
-                        </div> -->
-                          
-                      
-                            <li class="w3-bar">
-                              <img src="<%= u.avatar%>" alt="<%= u.name%>" class="w3-bar-item w3-circle " style="height: 80px; width: 80px;">
-                              <div class="w3-bar-item">
-                                <span class="w3-large"><a href="/user/profile/<%=u._id%>" ><%=u.name%></a></span>
-                              </div>
-                            </li>
-                        
-                        
-                        <%}%>
-                    </ul>    
-                    </div>  
-                </div>
-
 <!-- ------------------------------------------------------------------------- -->        
             </div> <!-- Main Row -->
      </div>  <!--  container-fluid -->
-
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.0.4/socket.io.js" integrity="sha512-aMGMvNYu8Ue4G+fHa359jcPb1u+ytAF+P2SCb+PxrjCdO3n3ZTxJ30zuH39rimUggmTwmh2u7wvQsDTHESnmfQ==" crossorigin="anonymous"></script>
      <script src="/js/home_post.js"></script>
      <script src="/js/togglelikes.js"></script>
+     <script src="/js/chat_engine.js"></script>
+     
+     
 
+     <%if (locals.user){%>
+        <script>
+            new ChatEngine('user-chat-box','<%= locals.user.email %>');
+        </script>
+     <%}%>   
+     
      <script>
          $('.toggle-like-button').each(function(){
         
